@@ -69,6 +69,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
   N1• = 5,000   N2• = 95,000   N = 100,000
   δ = 0.1   α = 0.05   batch size b = 100
 
+...
+
   ┌─ Iteration 24 Results ───────────────────────────────────
   │  Cumulative samples : n1=274  n2=2126
   │  Misclassifications : x1=29  x2=112
