@@ -29,10 +29,10 @@ pip install scipy numpy
 
 ## Usage
 
-### Interactive mode
+### Work mode
 
 ```bash
-python estimate_area.py --N1 5000 --N2 95000 --delta 0.05 --alpha 0.05 --batch 50
+python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 100
 ```
 
 You will be prompted each iteration to label a batch of units and enter the misclassification counts. Press `Ctrl+C` at any time to stop early.
@@ -42,8 +42,7 @@ You will be prompted each iteration to label a batch of units and enter the misc
 For testing, a random oracle can play the role of the human labeller:
 
 ```bash
-python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.1 --batch 100 \
-  --simulate --true-p1 0.08 --true-p2 0.03
+python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 100 --simulate --true-p1 0.1 --true-p2 0.05
 ```
 
 ## Arguments
@@ -52,13 +51,13 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.1 --batch 100
 |---|---|---|
 | `--N1` | *(required)* | Mapped unit count for Class 1 (rare class) |
 | `--N2` | *(required)* | Mapped unit count for Class 2 (background) |
-| `--delta` | `0.05` | Relative precision target δ — stops when the credible interval is within ±δ of the estimate |
+| `--delta` | `0.1` | Relative precision target δ — stops when the credible interval is within ±δ of the estimate |
 | `--alpha` | `0.05` | Credible interval significance level α — produces a (1−α)×100% interval |
-| `--batch` | `50` | Number of units to label per iteration |
+| `--batch` | `100` | Number of units to label per iteration |
 | `--simulate` | — | Enable simulation mode |
 | `--true-p1` | `0.1` | True Class 1 misclassification rate (simulation only) |
 | `--true-p2` | `0.05` | True Class 2 misclassification rate (simulation only) |
-| `--seed` | `42` | Random seed (simulation only) |
+| `--seed` | `666` | Random seed (simulation only) |
 
 ## Example output
 
@@ -68,21 +67,21 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.1 --batch 100
 ║   Sampling (Algorithm 1)                                 ║
 ╚══════════════════════════════════════════════════════════╝
   N1• = 5,000   N2• = 95,000   N = 100,000
-  δ = 0.1   α = 0.1   batch size b = 100
+  δ = 0.1   α = 0.05   batch size b = 100
 
-  ┌─ Iteration 16 Results ───────────────────────────────────
-  │  Cumulative samples : n1=162  n2=1438
-  │  Misclassifications : x1=12  x2=47
-  │  Estimate  N̂_{•1}  : 7,734.6
-  │  90% credible interval : [7,046.8,  8,558.5]
-  │  Precision target  : [7,031.5,  8,594.0]
+  ┌─ Iteration 24 Results ───────────────────────────────────
+  │  Cumulative samples : n1=274  n2=2126
+  │  Misclassifications : x1=29  x2=112
+  │  Estimate  N̂_{•1}  : 9,475.5
+  │  95% credible interval : [8,615.4,  10,457.8]
+  │  Precision target  : [8,614.1,  10,528.3]
   │  Target achieved?  : ✓ YES — stopping.
   └──────────────────────────────────────────────────
 
 ══════════════════════════════════════════════════════════
-  FINAL ESTIMATE:  N̂_{•1} = 7,734.6
-  90% credible interval: [7,046.8,  8,558.5]
-  Total samples used: n1=162, n2=1438  (total=1600)
+  FINAL ESTIMATE:  N̂_{•1} = 9,475.5
+  95% credible interval: [8,615.4,  10,457.8]
+  Total samples used: n1=274, n2=2126  (total=2400)
 ══════════════════════════════════════════════════════════
 ```
 
@@ -97,8 +96,8 @@ In a remote sensing workflow these would typically be verified against high-reso
 
 ## Precision criterion
 
-Sampling continues until the (1−α) credible interval [N_L, N_U] satisfies:
+Sampling continues until the (1−α) credible interval [\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U] satisfies:
 
-$$[N_L,\ N_U]\ \subseteq\ \left[\frac{\hat{N}_{\bullet 1}}{1+\delta},\ \frac{\hat{N}_{\bullet 1}}{1-\delta}\right]$$
+$$[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]\ \subseteq\ \left[\frac{\hat{N}_{\bullet 1}}{1+\delta},\ \frac{\hat{N}_{\bullet 1}}{1-\delta}\right]$$
 
 i.e. the interval is entirely within δ relative precision of the point estimate.
