@@ -2,7 +2,7 @@
 
 A command-line tool for adaptive stratified sampling to estimate the true area of a rare class in a reference map (e.g. a land-cover or satellite image classification). Implements **Algorithm 1** from:
 
-> *Adaptive area estimation via batch-based stratified sampling*
+> *Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*
 
 The algorithm accounts for map misclassification by iteratively sampling units from two strata, collecting human-verified misclassification counts, and refining a Bayesian area estimate until a target precision is achieved.
 
@@ -96,7 +96,7 @@ In a remote sensing workflow these would typically be verified against high-reso
 
 ## Precision criterion
 
-Sampling continues until the (1−α) credible interval [\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U] satisfies:
+Sampling continues until the (1−α) credible interval $[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]$ satisfies:
 
 $$[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]\ \subseteq\ \left[\frac{\hat{N}_{\bullet 1}}{1+\delta},\ \frac{\hat{N}_{\bullet 1}}{1-\delta}\right]$$
 
