@@ -2,7 +2,7 @@
 
 A command-line tool for adaptive stratified sampling to estimate the true area of a rare class in a reference map (e.g. a land-cover or satellite image classification). Implements **Algorithm 1** from:
 
-> *Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*
+> Oles V, Boschetti L, Roy DP, Dykhovychnyi O, Tubiello F, Mollicone D "*Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*"
 
 The algorithm accounts for map misclassification by iteratively sampling units from two strata, collecting human-verified misclassification counts, and refining a Bayesian area estimate until a target precision is achieved.
 
