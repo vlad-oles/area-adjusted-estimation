@@ -96,7 +96,7 @@ In a remote sensing workflow these would typically be verified against high-reso
 
 ## Precision criterion
 
-Sampling continues until the (1−α) credible interval $[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]$ satisfies:
+Sampling continues until the (1−α) credible interval $[\hat{N}^L_{\bullet 1}, \hat{N}^U_{\bullet 1}]$ satisfies:
 
 $$[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]\ \subseteq\ \left[\frac{\hat{N}_{\bullet 1}}{1+\delta},\ \frac{\hat{N}_{\bullet 1}}{1-\delta}\right]$$
 
