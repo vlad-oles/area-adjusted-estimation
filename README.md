@@ -8,7 +8,7 @@ The algorithm accounts for map misclassification by iteratively sampling units f
 
 ## How it works
 
-Given a map that classifies every unit (e.g. pixel) into either Class 1 (the rare target class, such as deforested land) or Class 2 (the background), the true area of Class 1 is:
+Given a map that classifies every unit (e.g. pixel) into either Class 1 (the rare target class, such as deforested land) or Class 2 (the background), the estimated true area of Class 1 is:
 
 $$\hat{N}_{\bullet 1} = \left(1 - \frac{x_1}{n_1}\right) N_{1\bullet} + \frac{x_2}{n_2} N_{2\bullet}$$
 
