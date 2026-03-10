@@ -14,11 +14,11 @@ refines the area estimate until a target precision is achieved.
 """
 
 import argparse
-import math
 import sys
+import json
+from pathlib import Path
 import scipy
 import numpy as np
-
 
 def beta_cdf_cached(a, b):
     def cdf(u):
@@ -178,7 +178,41 @@ def prompt_sample(n1_batch, n2_batch, iteration):
 # Main algorithm  (Algorithm 1)
 # ---------------------------------------------------------------------------
 
-def estimate_area(N1, N2, delta, alpha, b, simulate=None):
+def checkpoint_path(N1, N2, delta, alpha, b, simulate, true_p1=None, true_p2=None, seed=None):
+    name = f"estimate_area_N1={N1}_N2={N2}_delta={delta}_alpha={alpha}_b={b}"
+    if simulate:
+        name += f"_simulate_p1={true_p1}_p2={true_p2}_seed={seed}"
+    return Path(f"{name}.checkpoint.json")
+
+
+def save_checkpoint(path, state):
+    path.write_text(json.dumps(state, indent=2))
+
+
+def load_checkpoint(path):
+    return json.loads(path.read_text())
+
+
+def maybe_resume_checkpoint(path):
+    if not path.exists():
+        return None
+
+    while True:
+        ans = input(
+            f"Found interrupted run checkpoint:\n  {path}\n"
+            "Resume from saved state? [y/n]: "
+        ).strip().lower()
+
+        if ans in {"y", "yes"}:
+            return load_checkpoint(path)
+        if ans in {"n", "no"}:
+            path.unlink(missing_ok=True)
+            return None
+
+        print("Please enter y or n.")
+        
+        
+def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, resume_state=None):
     """
     ESTIMATEAREA(N1•, N2•, δ, α, b)
 
@@ -194,13 +228,25 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None):
     N = N1 + N2
 
     # Initialise accumulators
-    n1_total, n2_total = 0, 0
-    x1_total, x2_total = 0, 0
-    t = 0
+    if resume_state is None:
+        n1_total, n2_total = 0, 0
+        x1_total, x2_total = 0, 0
+        t = 0
+        history = []
 
-    # First batch allocated proportionally to mapped areas (line 5)
-    n1_batch = round(N1 / N * b)
-    n2_batch = b - n1_batch
+        # First batch allocated proportionally to mapped areas (line 5)
+        n1_batch = round(N1 / N * b)
+        n1_batch = max(0, min(n1_batch, b))
+        n2_batch = b - n1_batch
+    else:
+        n1_total = resume_state["n1_total"]
+        n2_total = resume_state["n2_total"]
+        x1_total = resume_state["x1_total"]
+        x2_total = resume_state["x2_total"]
+        t = resume_state["t"]
+        n1_batch = resume_state["n1_batch"]
+        n2_batch = resume_state["n2_batch"]
+        history = resume_state["history"]
 
     print()
     print("╔══════════════════════════════════════════════════════════╗")
@@ -210,8 +256,6 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None):
     print(f"  N1• = {N1:,}   N2• = {N2:,}   N = {N:,}")
     print(f"  δ = {delta}   α = {alpha}   batch size b = {b}")
     print()
-
-    history = []
 
     while True:
         t += 1
@@ -268,8 +312,20 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None):
         # ── Optimal allocation for next batch (lines 13–17) ───────────────
         lam = optimal_lambda(x1_total, n1_total, x2_total, n2_total, N1, N2)
         n1_batch_raw = round(((n2_total + b) * lam - n1_total) / (1 + lam))
-        n1_batch = max(min(n1_batch_raw, b), 0)
+        n1_batch = max(0, min(n1_batch_raw, b))
         n2_batch = b - n1_batch
+
+        if checkpoint_file is not None:
+            save_checkpoint(checkpoint_file, {
+                "n1_total": n1_total,
+                "n2_total": n2_total,
+                "x1_total": x1_total,
+                "x2_total": x2_total,
+                "t": t,
+                "n1_batch": n1_batch,
+                "n2_batch": n2_batch,
+                "history": history,
+            })
 
 
 
@@ -280,6 +336,9 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None):
     print(f"  Total samples used: n1={n1_total}, n2={n2_total}  "
           f"(total={n1_total+n2_total})")
     print("══════════════════════════════════════════════════════════")
+
+    if checkpoint_file is not None:
+        checkpoint_file.unlink(missing_ok=True)
 
     return Ndot1_hat, Ndot1_L, Ndot1_U, history
 
@@ -371,6 +430,19 @@ def main():
         print(f"[Simulation mode]  True N_{{•1}} = {true_area:,.1f}")
 
     try:
+        checkpoint_file = checkpoint_path(
+            N1=args.N1,
+            N2=args.N2,
+            delta=args.delta,
+            alpha=args.alpha,
+            b=args.batch,
+            simulate=args.simulate,
+            true_p1=args.true_p1 if args.simulate else None,
+            true_p2=args.true_p2 if args.simulate else None,
+            seed=args.seed if args.simulate else None,
+        )
+        resume_state = maybe_resume_checkpoint(checkpoint_file)
+    
         estimate_area(
             N1=args.N1,
             N2=args.N2,
@@ -378,6 +450,8 @@ def main():
             alpha=args.alpha,
             b=args.batch,
             simulate=simulate_fn,
+            checkpoint_file=checkpoint_file,
+            resume_state=resume_state,
         )
     except KeyboardInterrupt:
         print("\n\nInterrupted by user.")
