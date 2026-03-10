@@ -35,7 +35,9 @@ pip install scipy numpy
 python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 100
 ```
 
-You will be prompted each iteration to label a batch of units and enter the misclassification counts. Press `Ctrl+C` at any time to stop early.
+You will be prompted each iteration to label a batch of units and enter the misclassification counts.
+
+Press `Ctrl+C` at any time to stop early. If the program is interrupted, the current progress is automatically saved to a checkpoint file so the run can be resumed later.
 
 ### Simulation mode
 
@@ -58,6 +60,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 | `--true-p1` | `0.1` | True Class 1 misclassification rate (simulation only) |
 | `--true-p2` | `0.05` | True Class 2 misclassification rate (simulation only) |
 | `--seed` | `666` | Random seed (simulation only) |
+
+Checkpoint files are automatically named using the run parameters, so restarting the program with the same arguments allows interrupted runs to be resumed.
 
 ## Example output
 
@@ -103,3 +107,25 @@ Sampling continues until the (1−α) credible interval $[\hat{N}^L_{\bullet 1},
 $$[\hat{N}_{\bullet 1}^L,\ \hat{N}_{\bullet 1}^U]\ \subseteq\ \left[\frac{\hat{N}_{\bullet 1}}{1+\delta},\ \frac{\hat{N}_{\bullet 1}}{1-\delta}\right]$$
 
 i.e. the interval is entirely within δ relative precision of the point estimate.
+
+## Checkpointing and resuming runs
+
+The program automatically saves progress after each completed iteration to a checkpoint file.
+
+The checkpoint filename encodes the run parameters. For example:
+
+estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json
+
+This allows long labeling sessions to be interrupted and resumed later.
+
+If you restart the program with the **same parameters**, it will detect the checkpoint file and ask whether to resume:
+
+Found interrupted run checkpoint:
+estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json  
+Resume from saved state? [y/n]
+
+- `y` resumes the run from the last completed iteration.
+- `n` deletes the checkpoint and starts a new run.
+
+When the algorithm reaches the final estimate and exits normally, the checkpoint file is automatically deleted.
+
