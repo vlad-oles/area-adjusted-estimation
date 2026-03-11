@@ -94,7 +94,7 @@ def credible_interval(x1, n1, x2, n2, N1, N2, alpha):
 # ---------------------------------------------------------------------------
 
 def point_estimate(x1, n1, x2, n2, N1, N2):
-    """MAP area-adjusted estimate: N̂_{•1} = (1 - x1/n1)*N1• + (x2/n2)*N2•"""
+    """MLE area-adjusted estimate: N̂_{•1} = (1 - x1/n1)*N1• + (x2/n2)*N2•"""
     p1_hat = x1 / n1 if n1 > 0 else 0.
     p2_hat = x2 / n2 if n2 > 0 else 0.
     return (1 - p1_hat) * N1 + p2_hat * N2
