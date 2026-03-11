@@ -53,8 +53,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 |---|---|---|
 | `--N1` | *(required)* | mapped unit count for Class 1 (rare class) |
 | `--N2` | *(required)* | mapped unit count for Class 2 (background) |
-| `--delta` | `0.1` | relative precision target δ — stops when the credible interval is within ±δ of the estimate |
-| `--alpha` | `0.05` | credible interval significance level α — produces a (1−α)×100% interval |
+| `--delta` | `0.1` | relative error target δ |
+| `--alpha` | `0.05` | significance level α |
 | `--batch` | `100` | number of units to label per iteration |
 | `--simulate` | — | enable simulation mode |
 | `--true-p1` | `0.1` | true Class 1 misclassification rate (simulation only) |
