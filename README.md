@@ -51,15 +51,15 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 
 | Argument | Default | Description |
 |---|---|---|
-| `--N1` | *(required)* | Mapped unit count for Class 1 (rare class) |
-| `--N2` | *(required)* | Mapped unit count for Class 2 (background) |
-| `--delta` | `0.1` | Relative precision target δ — stops when the credible interval is within ±δ of the estimate |
-| `--alpha` | `0.05` | Credible interval significance level α — produces a (1−α)×100% interval |
-| `--batch` | `100` | Number of units to label per iteration |
-| `--simulate` | — | Enable simulation mode |
-| `--true-p1` | `0.1` | True Class 1 misclassification rate (simulation only) |
-| `--true-p2` | `0.05` | True Class 2 misclassification rate (simulation only) |
-| `--seed` | `666` | Random seed (simulation only) |
+| `--N1` | *(required)* | mapped unit count for Class 1 (rare class) |
+| `--N2` | *(required)* | mapped unit count for Class 2 (background) |
+| `--delta` | `0.1` | relative precision target δ — stops when the credible interval is within ±δ of the estimate |
+| `--alpha` | `0.05` | credible interval significance level α — produces a (1−α)×100% interval |
+| `--batch` | `100` | number of units to label per iteration |
+| `--simulate` | — | enable simulation mode |
+| `--true-p1` | `0.1` | true Class 1 misclassification rate (simulation only) |
+| `--true-p2` | `0.05` | true Class 2 misclassification rate (simulation only) |
+| `--seed` | `666` | random seed (simulation only) |
 
 Checkpoint files are automatically named using the run parameters, so restarting the program with the same arguments allows interrupted runs to be resumed.
 
@@ -114,15 +114,19 @@ The program automatically saves progress after each completed iteration to a che
 
 The checkpoint filename encodes the run parameters. For example:
 
+```
 estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json
+```
 
 This allows long labeling sessions to be interrupted and resumed later.
 
 If you restart the program with the **same parameters**, it will detect the checkpoint file and ask whether to resume:
 
+```
 Found interrupted run checkpoint:
-estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json  
+  estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json  
 Resume from saved state? [y/n]
+```
 
 - `y` resumes the run from the last completed iteration.
 - `n` deletes the checkpoint and starts a new run.
