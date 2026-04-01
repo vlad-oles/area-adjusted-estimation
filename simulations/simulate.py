@@ -4,6 +4,7 @@ import scipy
 from scipy.optimize import root_scalar
 import pandas as pd
 import os
+import json
 import time
 from mpi4py import MPI
 
@@ -130,14 +131,19 @@ P1_HAT_COL = 'p1_hat'
 P2_HAT_COL = 'p2_hat'
 AREA_COL = 'N_dot1'
 
-eps = .1
-alpha = .05
-Ns = {1: 21052*1111.11, 2: 2577304*1111.11} # pixels: mult by 1111.11
-ps = {1: .08873266197985939, 2: .0047332406266393096}
+root_dir = ''
+params_path = os.path.join(root_dir, 'map_params.json')
+params = json.load(open(params_path))
+
+# Read map parameters.
+eps = params['eps']
+alpha = params['alpha']
+ps = {1: params['p1'], 2: params['p2']} # misclassification rates
+Ns = {1: params['N1dot']*params['px_per_km2'], 2: params['N2dot']*params['px_per_km2']} # mapped areas (pixels)
 
 # Ensure data dir exists.
-data_dir = f'eps={eps},alpha={alpha},p1={ps[1]:.4f},p2={ps[2]:.4f},N1={Ns[1]:.0f},N2={Ns[2]:.0f}_CI'
-os.makedirs(data_dir, exist_ok=True)
+sim_dir = os.path.join(root_dir, f'eps={eps},alpha={alpha},p1={ps[1]:.4f},p2={ps[2]:.4f},N1={Ns[1]:.0f},N2={Ns[2]:.0f}')
+os.makedirs(sim_dir, exist_ok=True)
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
@@ -154,11 +160,11 @@ for replication in range(n_simulations):
         _, iter_data = estimate_area(eps, alpha, ps, Ns, rng)
 
         # Store experiment data.
-        data_path = os.path.join(data_dir, f'replication_{replication}.csv')
+        sim_path = os.path.join(sim_dir, f'replication_{replication}.csv')
         df = pd.DataFrame(
             data=iter_data,
             columns=[RATIO_COL, P1_HAT_COL, P2_HAT_COL, AREA_COL])
-        df.to_csv(data_path, index=False)
+        df.to_csv(sim_path, index=False)
 
         print(f'{time.ctime()} {rank=} finished {replication=}')
 
