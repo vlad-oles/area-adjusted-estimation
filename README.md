@@ -57,8 +57,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 | `--alpha` | `0.05` | significance level α |
 | `--batch` | `100` | number of units to label per iteration |
 | `--simulate` | — | enable simulation mode |
-| `--true-p1` | `0.1` | true Class 1 misclassification rate (simulation only) |
-| `--true-p2` | `0.05` | true Class 2 misclassification rate (simulation only) |
+| `--true-p1` | `0.1` | true Stratum 1 misclassification rate (simulation only) |
+| `--true-p2` | `0.05` | true Stratum 2 misclassification rate (simulation only) |
 | `--seed` | `666` | random seed (simulation only) |
 
 Checkpoint files are automatically named using the run parameters, so restarting the program with the same arguments allows interrupted runs to be resumed.
@@ -93,10 +93,10 @@ Checkpoint files are automatically named using the run parameters, so restarting
 
 ## What to enter when prompted
 
-At each iteration you are asked to sample the specified number of units from each class and manually verify their true class labels:
+At each iteration you are asked to sample the specified number of units from each stratum and manually verify their true class labels:
 
-- **x1** — how many of the Class 1 units are actually Class 2 (omission errors)
-- **x2** — how many of the Class 2 units are actually Class 1 (commission errors)
+- **x1** — how many of the Stratum 1 units are actually Class 2 (false positives)
+- **x2** — how many of the Stratum 2 units are actually Class 1 (false negatives)
 
 In a remote sensing workflow these would typically be verified against high-resolution imagery or field data.
 

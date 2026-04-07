@@ -8,8 +8,8 @@ Implements Algorithm 1 from:
 Usage:
     python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 100
 
-The algorithm iteratively samples units from two classes (Class 1 = rare/target,
-Class 2 = background), collects misclassification counts from the user, and
+The algorithm iteratively samples units from two strata (Stratum 1 = mapped rare/target class,
+Stratum 2 = mapped background class), collects misclassification counts from the user, and
 refines the area estimate until a target precision is achieved.
 """
 
@@ -134,21 +134,21 @@ def prompt_sample(n1_batch, n2_batch, iteration):
     print("=" * 60)
     print(f"  Please sample and label the following units:")
     if n1_batch > 0:
-        print(f"    • {n1_batch:>6} units from CLASS 1  (rare / target class)")
+        print(f"    • {n1_batch:>6} units from Stratum 1  (mapped rare / target class)")
     if n2_batch > 0:
-        print(f"    • {n2_batch:>6} units from CLASS 2  (background class)")
+        print(f"    • {n2_batch:>6} units from Stratum 2  (mapped background class)")
     print()
     print("  After labelling, count misclassifications:")
     if n1_batch > 0:
-        print("    x1 = number of Class-1 units that are actually Class 2")
+        print("    x1 = number of Stratum 1 units that are actually Class 2")
     if n2_batch > 0:
-        print("    x2 = number of Class-2 units that are actually Class 1")
+        print("    x2 = number of Stratum 2 units that are actually Class 1")
     print("-" * 60)
 
     if n1_batch > 0:
         while True:
             try:
-                x1 = int(input(f"  Enter x1 (misclassified from Class 1, 0–{n1_batch}): ").strip())
+                x1 = int(input(f"  Enter x1 (misclassified from Stratum 1, 0–{n1_batch}): ").strip())
                 if not (0 <= x1 <= n1_batch):
                     print(f"  ⚠  x1 must be between 0 and {n1_batch}. Try again.")
                     continue
@@ -161,7 +161,7 @@ def prompt_sample(n1_batch, n2_batch, iteration):
     if n2_batch > 0:
         while True:
             try:
-                x2 = int(input(f"  Enter x2 (misclassified from Class 2, 0–{n2_batch}): ").strip())
+                x2 = int(input(f"  Enter x2 (misclassified from Stratum 2, 0–{n2_batch}): ").strip())
                 if not (0 <= x2 <= n2_batch):
                     print(f"  ⚠  x2 must be between 0 and {n2_batch}. Try again.")
                     continue
@@ -263,8 +263,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
         # ── Sample and collect misclassification counts ──────────────────
         if simulate is not None:
             x1_batch, x2_batch = simulate(n1_batch, n2_batch)
-            print(f"\n[Iter {t}] Sampling {n1_batch} from Class 1, "
-                  f"{n2_batch} from Class 2  →  x1={x1_batch}, x2={x2_batch}")
+            print(f"\n[Iter {t}] Sampling {n1_batch} from Stratum 1, "
+                  f"{n2_batch} from Stratum 2  →  x1={x1_batch}, x2={x2_batch}")
         else:
             x1_batch, x2_batch = prompt_sample(n1_batch, n2_batch, t)
 
@@ -352,9 +352,9 @@ def parse_args():
         description=(
             "Batch-based adaptive stratified sampling for rare-class area estimation.\n\n"
             "The algorithm iteratively instructs you to label batches of units from\n"
-            "Class 1 (rare/target) and Class 2 (background), collects your\n"
-            "misclassification counts, and refines the area estimate until the\n"
-            "requested precision is achieved.\n"
+            "Stratum 1 (mapped rare/target class) and Stratum 2 (mapped background class),\n"
+            "collects your misclassification counts, and refines the area estimate until\n"
+            "the requested precision is achieved.\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
@@ -382,9 +382,9 @@ def parse_args():
     sim_group.add_argument("--simulate", action="store_true",
                            help="Run in simulation mode: a random oracle answers sampling queries.")
     sim_group.add_argument("--true-p1", type=float, default=0.1,
-                           help="True misclassification rate for Class 1 (simulation only).")
+                           help="True misclassification rate for Stratum 1 (simulation only).")
     sim_group.add_argument("--true-p2", type=float, default=0.05,
-                           help="True misclassification rate for Class 2 (simulation only).")
+                           help="True misclassification rate for Stratum 2 (simulation only).")
     sim_group.add_argument("--seed", type=int, default=666,
                            help="Random seed for simulation (default: 666).")
 
