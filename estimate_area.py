@@ -20,6 +20,11 @@ from pathlib import Path
 import scipy
 import numpy as np
 
+
+# ---------------------------------------------------------------------------
+# Beta distribution functions
+# ---------------------------------------------------------------------------
+
 def beta_cdf_cached(a, b):
     def cdf(u):
         if u <= 0:
@@ -32,6 +37,7 @@ def beta_cdf_cached(a, b):
     
     return cdf
 
+
 def beta_pdf_cached(a, b):
     # Precompute normalization once.
     norm = 1 / scipy.special.beta(a, b)
@@ -41,7 +47,11 @@ def beta_pdf_cached(a, b):
 
     return pdf
 
-    
+
+# ---------------------------------------------------------------------------
+# N_{•1} distribution functions
+# ---------------------------------------------------------------------------
+
 def Ndot1_cdf(u, a1, b1, a2, b2, N1, N2):
     """
     Find Pr[Ndot1 < u] assuming p1 ~ Beta(a1, b1), p2 ~ Beta(a2, b2)
@@ -58,7 +68,6 @@ def Ndot1_cdf(u, a1, b1, a2, b2, N1, N2):
         return (u - (1 - p1)*N1) / N2
     
     def integrand(p1):
-#        p1 = float(p1)
         p2_thresh = calc_p2_thresh(u, p1)
 
         return pdf_p1(p1) * cdf_p2(p2_thresh)
@@ -68,8 +77,9 @@ def Ndot1_cdf(u, a1, b1, a2, b2, N1, N2):
     
     return cdf
 
+
 def Ndot1_quantile(q, a1, b1, a2, b2, N1, N2):
-    # q in (0,1).
+    """Compute the value of quantile q in (0,1) for N_{•1}."""
     def func(u):
         return Ndot1_cdf(u, a1, b1, a2, b2, N1, N2) - q
 
@@ -78,9 +88,7 @@ def Ndot1_quantile(q, a1, b1, a2, b2, N1, N2):
 
     
 def credible_interval(x1, n1, x2, n2, N1, N2, alpha):
-    """
-    Return the equal-tail (1-alpha) credible interval for N_{•1}.
-    """
+    """Return the equal-tail (1-alpha) credible interval for N_{•1}."""
     a1, b1 = x1 + 1, n1 - x1 + 1
     a2, b2 = x2 + 1, n2 - x2 + 1
 
@@ -88,6 +96,7 @@ def credible_interval(x1, n1, x2, n2, N1, N2, alpha):
     Ndot1_U = Ndot1_quantile(1 - alpha/2, a1, b1, a2, b2, N1, N2)
 
     return Ndot1_L, Ndot1_U
+
 
 # ---------------------------------------------------------------------------
 # Area estimate
@@ -118,6 +127,7 @@ def optimal_lambda(x1, n1, x2, n2, N1, N2):
     den = (N - Ndot1_tilde) * (p2_tilde * (1 - p2_tilde))**.5
 
     return num / den if den > 0 else 1.
+
 
 # ---------------------------------------------------------------------------
 # Interactive sampling prompt
