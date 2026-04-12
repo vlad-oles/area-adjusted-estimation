@@ -293,8 +293,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
         # ── Report to user ───────────────────────────────────────────────
         print()
         print(f"  ┌─ Iteration {t} Results {'─'*35}")
-        print(f"  │  Cumulative samples : n1={n1_total}  n2={n2_total}")
-        print(f"  │  Misclassifications : x1={x1_total}  x2={x2_total}")
+        print(f"  │  Cumulative samples : Σ(n1)={n1_total}  Σ(n2)={n2_total}")
+        print(f"  │  Misclassifications : Σ(x1)={x1_total}  Σ(x2)={x2_total}")
         print(f"  │  Estimate  N̂_{{•1}}  : {Ndot1_hat:,.1f}")
         print(f"  │  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
 
