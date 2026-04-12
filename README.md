@@ -21,13 +21,11 @@ At each iteration the tool:
 4. Adaptively reallocates the next batch to minimise posterior variance
 5. Stops once the credible interval falls within the target precision bounds
 
-## Installation
+## Requirements
 
-```bash
-pip install scipy numpy
-```
+To use this tool, you must have Python available from the command line, with the `scipy` and `numpy` packages installed.
 
-## Usage
+## Usage examples
 
 ### Work mode
 
