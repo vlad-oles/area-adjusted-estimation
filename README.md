@@ -53,7 +53,7 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 | Argument | Default | Description |
 |---|---|---|
 | `--N1` | *(required)* | mapped unit count for Class 1 (target) |
-| `--N2` | *(required)* | mapped unit count for Class 2 |
+| `--N2` | *(required)* | mapped unit count for Class 2 (background) |
 | `--delta` | `0.1` | relative error target δ |
 | `--alpha` | `0.05` | significance level α |
 | `--batch` | `100` | number of units to label per iteration |
