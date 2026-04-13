@@ -4,7 +4,10 @@ A command-line tool for adaptive stratified sampling to estimate the true area o
 
 > Oles V, Boschetti L, Roy DP, Dykhovychnyi O, Tubiello F, Mollicone D "*Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*"
 
-The algorithm accounts for map misclassification by iteratively sampling units from two strata, collecting human-verified misclassification counts, and refining a Bayesian area estimate until a target precision is achieved.
+The algorithm accounts for map misclassification by iteratively prompting the user to
+sample units from two strata defined by the mapped classes, collecting the resulting
+misclassification counts, and updating the estimated Class 1 area until the target
+precision is achieved.
 
 ## How it works
 
@@ -12,7 +15,7 @@ Given a map that classifies every unit (e.g. pixel) into either Class 1 (the rar
 
 $$\hat{N}_{\bullet 1} = \left(1 - \frac{x_1}{n_1}\right) N_{1\bullet} + \frac{x_2}{n_2} N_{2\bullet}$$
 
-where $x_1, x_2$ are misclassification counts from samples of size $n_1, n_2$ drawn from each stratum.
+where $x_1, x_2$ are misclassification counts from samples of size $n_1, n_2$ drawn from each stratum (i.e. mapped Class 1 and mapped Class 2, respectively).
 
 At each iteration the tool:
 1. Tells you how many units to sample from each class
@@ -55,8 +58,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 | `--alpha` | `0.05` | significance level α |
 | `--batch` | `100` | number of units to label per iteration |
 | `--simulate` | — | enable simulation mode |
-| `--true-p1` | `0.1` | true Stratum 1 misclassification rate (simulation only) |
-| `--true-p2` | `0.05` | true Stratum 2 misclassification rate (simulation only) |
+| `--true-p1` | `0.1` | true misclassification rate in mapped Class 1 (simulation only) |
+| `--true-p2` | `0.05` | true misclassification rate in mapped Class 2 (simulation only) |
 | `--seed` | `666` | random seed (simulation only) |
 
 Checkpoint files are automatically named using the run parameters, so restarting the program with the same arguments allows interrupted runs to be resumed.
@@ -64,28 +67,27 @@ Checkpoint files are automatically named using the run parameters, so restarting
 ## Example output
 
 ```
-╔══════════════════════════════════════════════════════════╗
-║   Rare-Class Area Estimation — Adaptive Stratified       ║
-║   Sampling (Algorithm 1)                                 ║
-╚══════════════════════════════════════════════════════════╝
-  N1• = 5,000   N2• = 95,000   N = 100,000
+╔════════════════════════════════════════════════════════════╗
+║  Class 1 Area Estimation via Adaptive Stratified Sampling  ║
+╚════════════════════════════════════════════════════════════╝
+  N₁. = 5,000   N₂. = 95,000   N = 100,000
   δ = 0.1   α = 0.05   batch size b = 100
 
 ...
 
-  ┌─ Iteration 24 Results ───────────────────────────────────
-  │  Cumulative samples : n1=274  n2=2126
-  │  Misclassifications : x1=29  x2=112
-  │  Estimate  N̂_{•1}  : 9,475.5
-  │  95% credible interval : [8,615.4,  10,457.8]
-  │  Precision target  : [8,614.1,  10,528.3]
-  │  Target achieved?  : ✓ YES — stopping.
+  ┌─ Iteration 23 Results ───────────────────────────────────
+  │  Total sample size     : n₁=263  n₂=2037
+  │  Misclassifications    : x₁=20  x₂=87
+  │  Estimate N̂.₁          : 8,677.2
+  │  95% credible interval : [7,889.4,  9,594.8]
+  │  Precision target      : [7,888.4,  9,641.3]
+  │  Target achieved?      : ✓ YES — stopping.
   └──────────────────────────────────────────────────
 
 ══════════════════════════════════════════════════════════
-  FINAL ESTIMATE:  N̂_{•1} = 9,475.5
-  95% credible interval: [8,615.4,  10,457.8]
-  Total samples used: n1=274, n2=2126  (total=2400)
+  FINAL ESTIMATE        : N̂.₁ = 8,677.2
+  95% credible interval : [7,889.4,  9,594.8]
+  Total sample size     : n₁=263  n₂=2037  (n=2300)
 ══════════════════════════════════════════════════════════
 ```
 
@@ -93,8 +95,8 @@ Checkpoint files are automatically named using the run parameters, so restarting
 
 At each iteration you are asked to sample the specified number of units from each stratum and manually verify their true class labels:
 
-- **x1** — how many of the Stratum 1 units are actually Class 2 (false positives)
-- **x2** — how many of the Stratum 2 units are actually Class 1 (false negatives)
+- **Δx₁** — how many of the mapped Class 1 units are actually Class 2 (false positives)
+- **Δx₂** — how many of the mapped Class 2 units are actually Class 1 (false negatives)
 
 In a remote sensing workflow these would typically be verified against high-resolution imagery or field data.
 
@@ -130,4 +132,5 @@ Resume from saved state? [y/n]
 - `n` deletes the checkpoint and starts a new run.
 
 When the algorithm reaches the final estimate and exits normally, the checkpoint file is automatically deleted.
+
 
