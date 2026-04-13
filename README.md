@@ -1,6 +1,6 @@
 # Rare-class area estimation
 
-A command-line tool for adaptive stratified sampling to estimate the true area of a rare class in a reference map (e.g. a land-cover or satellite image classification). Implements **Algorithm 1** from:
+A command-line tool for adaptive stratified sampling to estimate the true area of a rare class in a binary map (e.g. a land-cover or satellite image classification). Implements **Algorithm 1** from:
 
 > Oles V, Boschetti L, Roy DP, Dykhovychnyi O, Tubiello F, Mollicone D "*Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*"
 
