@@ -1,6 +1,6 @@
-# Rare-class area estimation
+# Area-adjusted estimation for binary maps
 
-A command-line tool for adaptive stratified sampling to estimate the true area of a rare class in a binary map (e.g. a land-cover or satellite image classification). Implements **Algorithm 1** from:
+A command-line tool for adaptive stratified sampling to estimate the true area of Class 1 in a binary map (e.g. a map distinguishing deforestation from stable forest). Implements **Algorithm 1** from:
 
 > Oles V, Boschetti L, Roy DP, Dykhovychnyi O, Tubiello F, Mollicone D "*Accounting for needles amongst the earth observation haystacks: accurate area estimation of rare classes*"
 
@@ -11,7 +11,7 @@ precision is achieved.
 
 ## How it works
 
-Given a map that classifies every unit (e.g. pixel) into either Class 1 (the rare target class, such as deforested land) or Class 2 (the background), the estimated true area of Class 1 is:
+Given a map that classifies every unit (e.g. pixel) into either Class 1 (the target class, such as deforested land) or Class 2 (the background), the estimated true area of Class 1 is:
 
 $$\hat{N}_{\bullet 1} = \left(1 - \frac{x_1}{n_1}\right) N_{1\bullet} + \frac{x_2}{n_2} N_{2\bullet}$$
 
@@ -52,8 +52,8 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 
 | Argument | Default | Description |
 |---|---|---|
-| `--N1` | *(required)* | mapped unit count for Class 1 (rare class) |
-| `--N2` | *(required)* | mapped unit count for Class 2 (background) |
+| `--N1` | *(required)* | mapped unit count for Class 1 (target) |
+| `--N2` | *(required)* | mapped unit count for Class 2 |
 | `--delta` | `0.1` | relative error target δ |
 | `--alpha` | `0.05` | significance level α |
 | `--batch` | `100` | number of units to label per iteration |
