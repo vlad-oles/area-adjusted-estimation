@@ -264,7 +264,7 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
     print("║  Class 1 Area Estimation via Adaptive Stratified Sampling  ║")
     print("╚════════════════════════════════════════════════════════════╝")
     print(f"  N₁. = {N1:,}   N₂. = {N2:,}   N = {N:,}")
-    print(f"  δ = {delta}   α = {alpha}   batch size b = {b}")
+    print(f"  δ = {delta}   α = {alpha}   batch size b = {b:,}")
     print()
 
     while True:
@@ -294,8 +294,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
         # ── Report to user ───────────────────────────────────────────────
         print()
         print(f"  ┌─ Iteration {t} Results {'─'*35}")
-        print(f"  │  Total sample size     : n₁={n1_total}  n₂={n2_total}")
-        print(f"  │  Misclassifications    : x₁={x1_total}  x₂={x2_total}")
+        print(f"  │  Total sample size     : n₁={n1_total:,}  n₂={n2_total:,}")
+        print(f"  │  Misclassifications    : x₁={x1_total:,}  x₂={x2_total:,}")
         print(f"  │  Estimate N̂.₁          : {Ndot1_hat:,.1f}")
         print(f"  │  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
 
@@ -346,8 +346,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
     print("══════════════════════════════════════════════════════════")
     print(f"  FINAL ESTIMATE        : N̂.₁ = {Ndot1_hat:,.1f}")
     print(f"  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
-    print(f"  Total sample size     : n₁={n1_total}  n₂={n2_total}  "
-          f"(n={n1_total+n2_total})")
+    print(f"  Total sample size     : n₁={n1_total:,}  n₂={n2_total:,}  "
+          f"(n={n1_total+n2_total:,})")
     print("══════════════════════════════════════════════════════════")
 
     if checkpoint_file is not None:
