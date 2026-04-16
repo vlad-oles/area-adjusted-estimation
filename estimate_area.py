@@ -190,7 +190,7 @@ def prompt_sample(n1_batch, n2_batch, iteration):
 # ---------------------------------------------------------------------------
 
 def checkpoint_path(N1, N2, delta, alpha, b, simulate, true_p1=None, true_p2=None, seed=None):
-    name = f"estimate_area_N1={N1}_N2={N2}_delta={delta}_alpha={alpha}_b={b}"
+    name = f"N1={N1}_N2={N2}_delta={delta}_alpha={alpha}_b={b}"
     if simulate:
         name += f"_simulate_p1={true_p1}_p2={true_p2}_seed={seed}"
     return Path(f"{name}.checkpoint.json")

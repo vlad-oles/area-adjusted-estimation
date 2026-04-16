@@ -115,7 +115,7 @@ The program automatically saves progress after each completed iteration to a che
 The checkpoint filename encodes the run parameters. For example:
 
 ```
-estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json
+N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json
 ```
 
 This allows long labeling sessions to be interrupted and resumed later.
@@ -124,7 +124,7 @@ If you restart the program with the **same parameters**, it will detect the chec
 
 ```
 Found interrupted run checkpoint:
-  estimate_area_N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json  
+  N1=5000_N2=95000_delta=0.1_alpha=0.05_b=100.checkpoint.json  
 Resume from saved state? [y/n]
 ```
 
