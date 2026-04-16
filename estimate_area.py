@@ -294,8 +294,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
         # ── Report to user ───────────────────────────────────────────────
         print()
         print(f"  ┌─ Iteration {t} Results {'─'*35}")
-        print(f"  │  Total sample size     : n₁={n1_total:,}  n₂={n2_total:,}")
-        print(f"  │  Misclassifications    : x₁={x1_total:,}  x₂={x2_total:,}")
+        print(f"  │  Total sample size     : n₁ = {n1_total:,}  n₂ = {n2_total:,}")
+        print(f"  │  Misclassifications    : x₁ = {x1_total:,}  x₂ = {x2_total:,}")
         print(f"  │  Estimate N̂.₁          : {Ndot1_hat:,.1f}")
         print(f"  │  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
 
@@ -346,8 +346,8 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
     print("══════════════════════════════════════════════════════════")
     print(f"  FINAL ESTIMATE        : N̂.₁ = {Ndot1_hat:,.1f}")
     print(f"  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
-    print(f"  Total sample size     : n₁={n1_total:,}  n₂={n2_total:,}  "
-          f"(n={n1_total+n2_total:,})")
+    print(f"  Total sample size     : n₁ = {n1_total:,}  n₂ = {n2_total:,}  "
+          f"(n = {n1_total+n2_total:,})")
     print("══════════════════════════════════════════════════════════")
 
     if checkpoint_file is not None:
@@ -438,7 +438,7 @@ def main():
             x2 = int(rng.binomial(n2_b, p2_true))
             return x1, x2
 
-        print(f"\n[Simulation mode]  true p₁={p1_true}, true p₂={p2_true}, seed={args.seed}")
+        print(f"\n[Simulation mode]  true p₁ = {p1_true}, true p₂ = {p2_true}, seed = {args.seed}")
         true_area = (1 - p1_true) * args.N1 + p2_true * args.N2
         print(f"[Simulation mode]  True N.₁ = {true_area:,.1f}")
 
