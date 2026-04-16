@@ -52,11 +52,11 @@ python estimate_area.py --N1 5000 --N2 95000 --delta 0.1 --alpha 0.05 --batch 10
 
 | Argument | Default | Description |
 |---|---|---|
-| `--N1` | *(required)* | mapped unit count for Class 1 (target) |
-| `--N2` | *(required)* | mapped unit count for Class 2 (background) |
+| `--N1` | *(required)* | mapped unit count for Class 1 (target) N₁. |
+| `--N2` | *(required)* | mapped unit count for Class 2 (background) N₂. |
 | `--delta` | `0.1` | relative error target δ |
 | `--alpha` | `0.05` | significance level α |
-| `--batch` | `100` | number of units to label per iteration |
+| `--batch` | `100` | number of units to label per iteration b |
 | `--simulate` | — | enable simulation mode |
 | `--true-p1` | `0.1` | true misclassification rate in mapped Class 1 (simulation only) |
 | `--true-p2` | `0.05` | true misclassification rate in mapped Class 2 (simulation only) |
