@@ -347,7 +347,7 @@ def estimate_area(N1, N2, delta, alpha, b, simulate=None, checkpoint_file=None, 
     print(f"  FINAL ESTIMATE        : N̂.₁ = {Ndot1_hat:,.1f}")
     print(f"  {int((1-alpha)*100)}% credible interval : [{Ndot1_L:,.1f},  {Ndot1_U:,.1f}]")
     print(f"  Total sample size     : n₁ = {n1_total:,}  n₂ = {n2_total:,}  "
-          f"(n = {n1_total+n2_total:,})")
+          f"n = {n1_total+n2_total:,}")
     print("══════════════════════════════════════════════════════════")
 
     if checkpoint_file is not None:

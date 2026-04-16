@@ -87,7 +87,7 @@ Checkpoint files are automatically named using the run parameters, so restarting
 ══════════════════════════════════════════════════════════
   FINAL ESTIMATE        : N̂.₁ = 8,677.2
   95% credible interval : [7,889.4,  9,594.8]
-  Total sample size     : n₁ = 263  n₂ = 2,037  (n = 2,300)
+  Total sample size     : n₁ = 263  n₂ = 2,037  n = 2,300
 ══════════════════════════════════════════════════════════
 ```
 
